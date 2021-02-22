@@ -9,6 +9,16 @@ import {
 } from 'react-icons/ai'
 
 const accent = '#ef4b24'
+const colorScheme = 'orange'
+
+const githubUrl = 'https://github.com/grizzlybots11918/ultimategoal'
+const commitHash = 'ae6d9fa'
+
+const sdkVer = '6.1'
+
+const buildDt = "02/21/2021"
+const commitMsg = "feat(hdrive): commandsssssssss"
+const dsDl = `https://github.com/FIRST-Tech-Challenge/FtcRobotController/releases/download/v${sdkVer}/FtcDriverStation-release.apk`
 
 export default function Home() {
 	return (
@@ -23,10 +33,10 @@ export default function Home() {
 				justify="center"
 				align="center"
 				bg={accent}>
-				<Card />
+				<Card githubUrl={githubUrl} commitHash={commitHash} buildDate={buildDt} commitMsg={commitMsg}/>
 
-				<a href="https://github.com/grizzlybots11918/builds">
-					<IconButton aria-label="View site source" icon={<GoMarkGithub />} />
+				<a href='https://github.com/grizzlybots11918/builds'>
+					<IconButton aria-label="View source on GitHub" icon={<GoMarkGithub />} />
 				</a>
 			</Flex>
 		</div>
@@ -57,7 +67,7 @@ function SDK(props) {
 	)
 }
 
-function Card() {
+function Card(props) {
 	return (
 		<Flex
 			maxW="xl"
@@ -73,58 +83,61 @@ function Card() {
 			<Text color="gray.500" fontWeight="bold" fontSize="2xl" pb={2}>
 				LATEST RC BUILD
 			</Text>
-			<FullBuildInfo />
+			<FullBuildInfo sdkVer={sdkVer} buildDate={props.buildDate} commitMsg={props.commitMsg} commitHash={props.commitHash} />
 			<Flex>
 				<Button
 					m="1"
 					leftIcon={<DownloadIcon />}
-					colorScheme="orange"
+					colorScheme={colorScheme}
 					variant="solid">
 					<a href="#">Download RC</a>
 				</Button>{' '}
+				<a href={dsDl}>
+					<Button
+						m="1"
+						leftIcon={<DownloadIcon />}
+						colorScheme={colorScheme}
+						variant="solid">
+						Download DS
+					</Button>
+				</a>
+			</Flex>
+			<a href={`${props.githubUrl}/tree/${props.commitHash}`}>
 				<Button
 					m="1"
-					leftIcon={<DownloadIcon />}
-					colorScheme="orange"
-					variant="solid">
-					<a href="#">Download DS</a>
+					leftIcon={<ArrowRightIcon />}
+					colorScheme={colorScheme}
+					variant="outline">
+					View Source
 				</Button>
-			</Flex>
-			<Button
-				m="1"
-				leftIcon={<ArrowRightIcon />}
-				colorScheme="orange"
-				variant="outline">
-				<a href="#">View Source</a>
-			</Button>
-			{/* at the bottom include 2 download buttons, one for the robot controller and one for the driver station, and add a third button underneath for viewing source code of that commit  */}
+			</a>
 		</Flex>
 	)
 }
 
-function FullBuildInfo() {
+function FullBuildInfo(props) {
 	return (
 		<Flex bg="white" borderRadius="2xl" p="3" justify="center" align="center">
-			<SDK version="6.1" />
-			<BuildDetails />
+			<SDK version={props.sdkVer} />
+			<BuildDetails buildDate={props.buildDate} commitMsg={props.commitMsg} commitHash={props.commitHash} />
 		</Flex>
 	)
 }
 
-function BuildDetails() {
+function BuildDetails(props) {
 	return (
 		<Flex direction="column" p={3}>
 			<Flex>
 				<Icon m={1} as={AiOutlineGithub} />
-				<Text>ae6dfa</Text>
+				<Text>{props.commitHash}</Text>
 			</Flex>
 			<Flex>
 				<Icon m={1} as={AiOutlineFieldTime} />
-				<Text>03/02/2021</Text>
+				<Text>{props.buildDate}</Text>
 			</Flex>
 			<Flex>
 				<Icon m={1} as={AiOutlineMessage} />
-				<Text>feat(shooter): make it work</Text>
+				<Text>{props.commitMsg}</Text>
 			</Flex>
 		</Flex>
 	)
