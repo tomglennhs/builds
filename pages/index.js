@@ -50,7 +50,7 @@ export default function Home() {
 }
 
 function SDK(props) {
-	const {version} = props
+	const { version } = props
 	return (
 		<Flex maxW="min" direction="column" align="center" justify="center">
 			<Flex justify="center" borderTopRadius="xl" w="full" bg={accent} m={0}>
@@ -75,7 +75,7 @@ function SDK(props) {
 }
 
 function Card(props) {
-	const {sdkVer,buildDate,commitHash,commitMsg} = props
+	const { sdkVer, buildDate, commitHash, commitMsg } = props
 	return (
 		<Flex
 			maxW="xl"
@@ -91,6 +91,7 @@ function Card(props) {
 			<Text color="gray.500" fontWeight="bold" fontSize="2xl" pb={2}>
 				LATEST RC BUILD
 			</Text>
+			<Text>This is currently WIP and for now this is all dummy data.</Text>
 			<FullBuildInfo
 				sdkVer={sdkVer}
 				buildDate={buildDate}
@@ -129,7 +130,7 @@ function Card(props) {
 }
 
 function FullBuildInfo(props) {
-	const {buildDate, commitMsg, commitHash, sdkVer} = props
+	const { buildDate, commitMsg, commitHash, sdkVer } = props
 	return (
 		<Flex bg="white" borderRadius="2xl" p="3" justify="center" align="center">
 			<SDK version={sdkVer} />
