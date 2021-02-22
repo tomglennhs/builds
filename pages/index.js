@@ -10,14 +10,11 @@ import {
 
 const accent = '#ef4b24'
 const colorScheme = 'orange'
-
 const githubUrl = 'https://github.com/grizzlybots11918/ultimategoal'
 const commitHash = 'ae6d9fa'
-
 const sdkVer = '6.1'
-
-const buildDt = "02/21/2021"
-const commitMsg = "feat(hdrive): commandsssssssss"
+const buildDt = '02/21/2021'
+const commitMsg = 'feat(hdrive): commandsssssssss'
 const dsDl = `https://github.com/FIRST-Tech-Challenge/FtcRobotController/releases/download/v${sdkVer}/FtcDriverStation-release.apk`
 
 export default function Home() {
@@ -33,10 +30,19 @@ export default function Home() {
 				justify="center"
 				align="center"
 				bg={accent}>
-				<Card githubUrl={githubUrl} commitHash={commitHash} buildDate={buildDt} commitMsg={commitMsg}/>
+				<Card
+					sdkVer={sdkVer}
+					githubUrl={githubUrl}
+					commitHash={commitHash}
+					buildDate={buildDt}
+					commitMsg={commitMsg}
+				/>
 
-				<a href='https://github.com/grizzlybots11918/builds'>
-					<IconButton aria-label="View source on GitHub" icon={<GoMarkGithub />} />
+				<a href="https://github.com/grizzlybots11918/builds">
+					<IconButton
+						aria-label="View source on GitHub"
+						icon={<GoMarkGithub />}
+					/>
 				</a>
 			</Flex>
 		</div>
@@ -44,6 +50,7 @@ export default function Home() {
 }
 
 function SDK(props) {
+	const {version} = props
 	return (
 		<Flex maxW="min" direction="column" align="center" justify="center">
 			<Flex justify="center" borderTopRadius="xl" w="full" bg={accent} m={0}>
@@ -61,13 +68,14 @@ function SDK(props) {
 				w="full"
 				p="3"
 				bg="white">
-				<Text fontSize="4xl">v{props.version}</Text>
+				<Text fontSize="4xl">v{version}</Text>
 			</Flex>
 		</Flex>
 	)
 }
 
 function Card(props) {
+	const {sdkVer,buildDate,commitHash,commitMsg} = props
 	return (
 		<Flex
 			maxW="xl"
@@ -83,7 +91,12 @@ function Card(props) {
 			<Text color="gray.500" fontWeight="bold" fontSize="2xl" pb={2}>
 				LATEST RC BUILD
 			</Text>
-			<FullBuildInfo sdkVer={sdkVer} buildDate={props.buildDate} commitMsg={props.commitMsg} commitHash={props.commitHash} />
+			<FullBuildInfo
+				sdkVer={sdkVer}
+				buildDate={buildDate}
+				commitMsg={commitMsg}
+				commitHash={commitHash}
+			/>
 			<Flex>
 				<Button
 					m="1"
@@ -102,7 +115,7 @@ function Card(props) {
 					</Button>
 				</a>
 			</Flex>
-			<a href={`${props.githubUrl}/tree/${props.commitHash}`}>
+			<a href={`${githubUrl}/tree/${commitHash}`}>
 				<Button
 					m="1"
 					leftIcon={<ArrowRightIcon />}
@@ -116,28 +129,34 @@ function Card(props) {
 }
 
 function FullBuildInfo(props) {
+	const {buildDate, commitMsg, commitHash, sdkVer} = props
 	return (
 		<Flex bg="white" borderRadius="2xl" p="3" justify="center" align="center">
-			<SDK version={props.sdkVer} />
-			<BuildDetails buildDate={props.buildDate} commitMsg={props.commitMsg} commitHash={props.commitHash} />
+			<SDK version={sdkVer} />
+			<BuildDetails
+				buildDate={buildDate}
+				commitMsg={commitMsg}
+				commitHash={commitHash}
+			/>
 		</Flex>
 	)
 }
 
 function BuildDetails(props) {
+	const { commitHash, buildDate, commitMsg } = props
 	return (
 		<Flex direction="column" p={3}>
 			<Flex>
 				<Icon m={1} as={AiOutlineGithub} />
-				<Text>{props.commitHash}</Text>
+				<Text>{commitHash}</Text>
 			</Flex>
 			<Flex>
 				<Icon m={1} as={AiOutlineFieldTime} />
-				<Text>{props.buildDate}</Text>
+				<Text>{buildDate}</Text>
 			</Flex>
 			<Flex>
 				<Icon m={1} as={AiOutlineMessage} />
-				<Text>{props.commitMsg}</Text>
+				<Text>{commitMsg}</Text>
 			</Flex>
 		</Flex>
 	)
