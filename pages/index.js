@@ -15,8 +15,9 @@ const commitHash = 'ae6d9fa'
 const sdkVer = '6.1'
 const buildDt = '02/21/2021'
 const commitMsg = 'feat(hdrive): commandsssssssss'
-const dsDl = `https://github.com/FIRST-Tech-Challenge/FtcRobotController/releases/download/v${sdkVer}/FtcDriverStation-release.apk`
-
+const dsDlOld = `FIRST-Tech-Challenge/FtcRobotController/releases/download/v${sdkVer}/FtcDriverStation-release.apk`
+// const dsDl = `/download?url=${encodeURIComponent(dsDlOld)}`
+const dsDl = `/download/${dsDlOld}`
 export default function Home() {
 	return (
 		<div>
@@ -99,14 +100,16 @@ function Card(props) {
 				commitHash={commitHash}
 			/>
 			<Flex>
+			<a href="#" download={`GBRobotControllerApp_SDK${sdkVer}_${buildDate.replace(/\W+/g, "-")}_${commitHash}.apk`}>
 				<Button
 					m="1"
 					leftIcon={<DownloadIcon />}
 					colorScheme={colorScheme}
 					variant="solid">
-					<a href="#">Download RC</a>
-				</Button>{' '}
-				<a href={dsDl}>
+					Download RC
+				</Button>
+				</a>
+				<a href={dsDl} download={`GBDriverStationApp_SDK${sdkVer}.apk`}> 
 					<Button
 						m="1"
 						leftIcon={<DownloadIcon />}
