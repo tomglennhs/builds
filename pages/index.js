@@ -100,16 +100,21 @@ function Card(props) {
 				commitHash={commitHash}
 			/>
 			<Flex>
-			<a href="#" download={`GBRobotControllerApp_SDK${sdkVer}_${buildDate.replace(/\W+/g, "-")}_${commitHash}.apk`}>
-				<Button
-					m="1"
-					leftIcon={<DownloadIcon />}
-					colorScheme={colorScheme}
-					variant="solid">
-					Download RC
-				</Button>
+				<a
+					href="#"
+					download={`GBRobotControllerApp_SDK${sdkVer}_${buildDate.replace(
+						/\W+/g,
+						'-'
+					)}_${commitHash}.apk`}>
+					<Button
+						m="1"
+						leftIcon={<DownloadIcon />}
+						colorScheme={colorScheme}
+						variant="solid">
+						Download RC
+					</Button>
 				</a>
-				<a href={dsDl} download={`GBDriverStationApp_SDK${sdkVer}.apk`}> 
+				<a href={dsDl} download={`GBDriverStationApp_SDK${sdkVer}.apk`}>
 					<Button
 						m="1"
 						leftIcon={<DownloadIcon />}
