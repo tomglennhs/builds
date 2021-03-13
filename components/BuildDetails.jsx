@@ -15,7 +15,7 @@ export function BuildDetails(props) {
                 <Icon m={1} as={AiOutlineGithub} />
                 <Text>{commitHash}</Text>
             </Flex>
-            <Tooltip hasArrow label={`${buildDate  } UTC`} aria-label="Commit date in UTC">
+            <Tooltip hasArrow label={`${buildDate} UTC`} aria-label="Commit date in UTC">
                 <Flex>
                     <Icon m={1} as={AiOutlineFieldTime} />
                     <Text>{new Date(buildDate).toString()}</Text>

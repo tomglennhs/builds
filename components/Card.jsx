@@ -59,7 +59,8 @@ export function Card(props) {
                 <a
                     href={dsDl}
                     download={`GBDriverStationApp_SDK${sdkVer}.apk`}
-                    target="_blank" rel="noopener noreferrer">
+                    target="_blank"
+                    rel="noopener noreferrer">
                     <Button
                         m="1"
                         leftIcon={<DownloadIcon />}

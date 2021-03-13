@@ -99,7 +99,10 @@ export default function Home(props) {
                 bg={accent}>
                 <Card colorScheme={colorScheme} {...props} />
 
-                <a href="https://github.com/grizzlybots11918/builds" rel="noopener noreferrer" target="_blank">
+                <a
+                    href="https://github.com/grizzlybots11918/builds"
+                    rel="noopener noreferrer"
+                    target="_blank">
                     <IconButton
                         aria-label="View source on GitHub"
                         icon={<GoMarkGithub />}
