@@ -3,6 +3,7 @@ import { Octokit } from '@octokit/rest'
 import { IconButton, Flex } from '@chakra-ui/react'
 import { GoMarkGithub } from 'react-icons/go'
 import { Card } from '../components/Card'
+var parser = require('fast-xml-parser')
 
 const accent = process.env.NEXT_PUBLIC_ACCENT
 const colorScheme = process.env.NEXT_PUBLIC_COLOR_SCHEME
@@ -21,12 +22,23 @@ export async function getServerSideProps() {
 	const repo = teamRepo[1]
 	const buildWorkflow = process.env.teamBuildWorkflow
 	const branch = process.env.teamDefaultBranch
+	const manifestUrl = `https://raw.githubusercontent.com/${tr}/${branch}/FtcRobotController/src/main/AndroidManifest.xml`
 	const res = await octokit.actions.listWorkflowRunsForRepo({
 		owner,
 		repo,
 		branch,
 		status: 'success',
 	})
+	
+	const manifest = await (await fetch(manifestUrl)).text()
+	var jsonObj = parser.parse(manifest, {
+		parseAttributeValue: true,
+		ignoreAttributes: false,
+		attrNodeName: 'attr',
+	})
+
+	const sdkVer = jsonObj.manifest.attr["@_android:versionName"].toString() || "?"
+
 	const runs = res.data.workflow_runs.filter((run) => {
 		return run.name == buildWorkflow
 	})
@@ -35,13 +47,11 @@ export async function getServerSideProps() {
 	const latestRun = runs[0]
 	const previousRun = runs[1]
 	const hash = latestRun.head_sha
-	const oldHash = previousRun.head_sha
 
-	console.log(latestRun)
-	const sdkVer = '6.2'
+	
 	// TODO: make this not so hacky
 	const compareUrl = latestRun.head_repository.compare_url
-		.replace('{base}', oldHash)
+		.replace('{base}', previousRun.head_sha)
 		.replace('{head}', hash)
 		.replace('api.', '')
 		.replace('/repos', '')
@@ -78,7 +88,6 @@ export default function Home(props) {
 		teamRepo,
 		branch,
 	} = props
-	console.log(props)
 	return (
 		<div>
 			<Head>
