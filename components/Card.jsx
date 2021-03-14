@@ -14,7 +14,8 @@ export function Card(props) {
         colorScheme,
         compareUrl,
         branch,
-        dsDl
+        dsDl,
+        rcDl
     } = props
     return (
         <Flex
@@ -43,17 +44,17 @@ export function Card(props) {
             <FullBuildInfo {...props} />
             <Flex>
                 <a
-                    href="#"
+                    href={rcDl}
                     download={`GBRobotControllerApp_SDK${sdkVer}_${buildDate.replace(
                         /\W+/g,
                         '-'
-                    )}_${commitHash}.apk`}>
+                    )}_${commitHash}.zip`}>
                     <Button
                         m="1"
                         leftIcon={<DownloadIcon />}
                         colorScheme={colorScheme}
                         variant="solid">
-                        Download RC
+                        Download RC (ZIP)
                     </Button>
                 </a>
                 <a
@@ -66,7 +67,7 @@ export function Card(props) {
                         leftIcon={<DownloadIcon />}
                         colorScheme={colorScheme}
                         variant="solid">
-                        Download DS
+                        Download DS (APK)
                     </Button>
                 </a>
             </Flex>
