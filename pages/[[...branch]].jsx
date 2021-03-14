@@ -1,6 +1,6 @@
-import Head from "next/head"
-import Link from "next/link"
-import { Octokit } from "@octokit/rest"
+import Head from 'next/head'
+import Link from 'next/link'
+import { Octokit } from '@octokit/rest'
 import {
     IconButton,
     Flex,
@@ -8,11 +8,12 @@ import {
     AlertIcon,
     AlertTitle,
     AlertDescription,
-    Code, Button
-} from "@chakra-ui/react"
-import { GoMarkGithub } from "react-icons/go"
-import { Card } from "../components/Card"
-const parser = require("fast-xml-parser")
+    Code,
+    Button
+} from '@chakra-ui/react'
+import { GoMarkGithub } from 'react-icons/go'
+import { Card } from '../components/Card'
+const parser = require('fast-xml-parser')
 
 const accent = process.env.NEXT_PUBLIC_ACCENT
 const colorScheme = process.env.NEXT_PUBLIC_COLOR_SCHEME
@@ -23,7 +24,7 @@ export async function getServerSideProps(ctx) {
             return {
                 props: {
                     err:
-                        "There is no accent color set. Please check your next.config.js or environment variables to confirm that the `NEXT_PUBLIC_ACCENT` variable is set."
+                        'There is no accent color set. Please check your next.config.js or environment variables to confirm that the `NEXT_PUBLIC_ACCENT` variable is set.'
                 }
             }
         }
@@ -32,7 +33,7 @@ export async function getServerSideProps(ctx) {
             return {
                 props: {
                     err:
-                        "There is no colorScheme set. Please check your next.config.js or environment variables to confirm that the `NEXT_PUBLIC_COLOR_SCHEME` variable is set."
+                        'There is no colorScheme set. Please check your next.config.js or environment variables to confirm that the `NEXT_PUBLIC_COLOR_SCHEME` variable is set.'
                 }
             }
         }
@@ -43,7 +44,7 @@ export async function getServerSideProps(ctx) {
             return {
                 props: {
                     err:
-                        "There is no team repository set. Please check your next.config.js or environment variables to confirm that the `teamRepo` variable is set."
+                        'There is no team repository set. Please check your next.config.js or environment variables to confirm that the `teamRepo` variable is set.'
                 }
             }
         }
@@ -52,18 +53,18 @@ export async function getServerSideProps(ctx) {
             return {
                 props: {
                     err:
-                        "There is no GitHub access token set. Please check your .env.local or environment variables to confirm that the `GITHUB_PAT` variable is set."
+                        'There is no GitHub access token set. Please check your .env.local or environment variables to confirm that the `GITHUB_PAT` variable is set.'
                 }
             }
         }
 
         const octokit = new Octokit({ auth: process.env.GITHUB_PAT })
-        const teamRepo = tr.split("/")
+        const teamRepo = tr.split('/')
         if (teamRepo.length !== 2) {
             return {
                 props: {
                     error:
-                        "The repo was specified in an incorrect format. Please check your environment variables or next.config.js env to confirm that the `teamRepo` var is set in the format of `organization/repo`."
+                        'The repo was specified in an incorrect format. Please check your environment variables or next.config.js env to confirm that the `teamRepo` var is set in the format of `organization/repo`.'
                 }
             }
         }
@@ -76,7 +77,7 @@ export async function getServerSideProps(ctx) {
             return {
                 props: {
                     err:
-                        "There is no teamBuildWorkflow set. Please check your next.config.js or environment variables to confirm that the `teamBuildWorkflow` variable is set to the path to your build workflow."
+                        'There is no teamBuildWorkflow set. Please check your next.config.js or environment variables to confirm that the `teamBuildWorkflow` variable is set to the path to your build workflow.'
                 }
             }
         }
@@ -86,13 +87,13 @@ export async function getServerSideProps(ctx) {
                 ? ctx.params.branch[0]
                 : process.env.teamDefaultBranch
 
-        var res
+        let res
         try {
             res = await octokit.actions.listWorkflowRunsForRepo({
                 owner,
                 repo,
                 branch,
-                status: "success"
+                status: 'success'
             })
         } catch (err) {
             return {
@@ -104,7 +105,7 @@ export async function getServerSideProps(ctx) {
         }
 
         const manifestUrl = `https://raw.githubusercontent.com/${tr}/${branch}/FtcRobotController/src/main/AndroidManifest.xml`
-        var manifest
+        let manifest
         try {
             manifest = await (await fetch(manifestUrl)).text()
         } catch (err) {
@@ -116,18 +117,19 @@ export async function getServerSideProps(ctx) {
             }
         }
 
-        var jsonObj, sdkVer
+        let jsonObj
+        let sdkVer
         try {
             jsonObj = parser.parse(manifest, {
                 parseAttributeValue: true,
                 ignoreAttributes: false,
-                attrNodeName: "attr"
+                attrNodeName: 'attr'
             })
-            sdkVer = jsonObj.manifest.attr["@_android:versionName"].toString() || "?"
+            sdkVer = jsonObj.manifest.attr['@_android:versionName'].toString() || '?'
         } catch (err) {
             return {
                 props: {
-                    err: "There was an error parsing the SDK Version from XML.",
+                    err: 'There was an error parsing the SDK Version from XML.',
                     verboseErr: err.toString()
                 }
             }
@@ -147,13 +149,15 @@ export async function getServerSideProps(ctx) {
         const previousRun = runs[1]
         const hash = latestRun.head_sha
 
-        var artifacts, artifact
+        let artifacts
+        let artifact
         try {
             artifacts = await octokit.actions.listWorkflowRunArtifacts({
                 owner,
                 repo,
                 run_id: latestRun.id
             })
+            // eslint-disable-next-line prefer-destructuring
             artifact = artifacts.data.artifacts[0]
         } catch (err) {
             return {
@@ -167,10 +171,10 @@ export async function getServerSideProps(ctx) {
         console.dir(artifacts.data)
 
         const compareUrl = latestRun.head_repository.compare_url
-            .replace("{base}", previousRun.head_sha)
-            .replace("{head}", hash)
-            .replace("api.", "")
-            .replace("/repos", "")
+            .replace('{base}', previousRun.head_sha)
+            .replace('{head}', hash)
+            .replace('api.', '')
+            .replace('/repos', '')
 
         const dsDl = `/api/downloadDs/${sdkVer}`
         const rcDl = `/api/downloadRc/${artifact.id}`
@@ -197,7 +201,7 @@ export async function getServerSideProps(ctx) {
     } catch (err) {
         return {
             props: {
-                err: "There was an unhandled server error.",
+                err: 'There was an unhandled server error.',
                 verboseErr: err
             }
         }
@@ -205,6 +209,7 @@ export async function getServerSideProps(ctx) {
 }
 
 export default function Home(props) {
+    // eslint-disable-next-line react/destructuring-assignment
     if (props.data) {
         const {
             sdkVer,
@@ -243,30 +248,23 @@ export default function Home(props) {
                 </Flex>
             </div>
         )
-    } else {
-        return (
-            <>
-                <Alert status="error">
-                    <AlertIcon />
-                    <AlertTitle mr={2}>There was an error.</AlertTitle>
-                    <AlertDescription>
-                        {props.err ? `From the server: ${props.err}` : ""}
-                        {props.verboseErr ? (
-                            <Code colorScheme="yellow">{props.verboseErr}</Code>
-                        ) : (
-                            ""
-                        )}
-
-                    </AlertDescription>
-                    <Link href="/">
-                    <Button
-                        m="1"
-                        variant="solid">
+    }
+    const { err, verboseErr } = props
+    return (
+        <>
+            <Alert status="error">
+                <AlertIcon />
+                <AlertTitle mr={2}>There was an error.</AlertTitle>
+                <AlertDescription>
+                    {err ? `From the server: ${err}` : ''}
+                    {verboseErr ? <Code colorScheme="yellow">{verboseErr}</Code> : ''}
+                </AlertDescription>
+                <Link href="/">
+                    <Button m="1" variant="solid">
                         Go Home
                     </Button>
                 </Link>
-                </Alert>
-            </>
-        )
-    }
+            </Alert>
+        </>
+    )
 }

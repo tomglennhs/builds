@@ -2,15 +2,15 @@ import { Octokit } from '@octokit/rest'
 const octokit = new Octokit({ auth: process.env.GITHUB_PAT })
 
 export default async function rcDl(req, res) {
-    const {artifactId} = req.query
+    const { artifactId } = req.query
     const artifact_id = parseInt(artifactId)
-    const tr = process.env.teamRepo.split("/")
+    const tr = process.env.teamRepo.split('/')
     const dl = await octokit.actions.downloadArtifact({
         owner: tr[0],
         repo: tr[1],
         artifact_id,
-        archive_format: "zip",
-      });
+        archive_format: 'zip'
+    })
 
     console.log(dl)
     res.statusCode = 200
