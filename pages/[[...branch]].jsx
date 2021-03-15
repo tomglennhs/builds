@@ -129,7 +129,7 @@ export async function getServerSideProps(ctx) {
         } catch (err) {
             return {
                 props: {
-                    err: "There was an error parsing the SDK Version from XML.",
+                    err: "There was an error parsing the SDK Version from XML. Please ensure that this repo contains a robot controller project.",
                     verboseErr: err.toString()
                 }
             }
