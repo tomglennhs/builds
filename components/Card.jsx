@@ -104,10 +104,10 @@ export function Card(props) {
                 }}
                 placeholder="Select branch...">
                 {branchList.map((branch) => (
-                        <option key={branch} value={branch}>
-                            {branch} {branch === defaultBranch ? '(default)' : ''}
-                        </option>
-                    ))}
+                    <option key={branch} value={branch}>
+                        {branch} {branch === defaultBranch ? '(default)' : ''}
+                    </option>
+                ))}
             </Select>
             <Text pt={2} color="gray.500" fontSize="xs">
                 Currently WIP but mostly functional.
