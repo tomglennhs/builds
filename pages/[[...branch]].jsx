@@ -1,6 +1,6 @@
-import Head from "next/head"
-import Link from "next/link"
-import { Octokit } from "@octokit/rest"
+import Head from 'next/head'
+import Link from 'next/link'
+import { Octokit } from '@octokit/rest'
 import {
     IconButton,
     Flex,
@@ -10,10 +10,10 @@ import {
     AlertDescription,
     Code,
     Button
-} from "@chakra-ui/react"
-import { GoMarkGithub } from "react-icons/go"
-import { Card } from "../components/Card"
-const parser = require("fast-xml-parser")
+} from '@chakra-ui/react'
+import { GoMarkGithub } from 'react-icons/go'
+import { Card } from '../components/Card'
+const parser = require('fast-xml-parser')
 
 const accent = process.env.NEXT_PUBLIC_ACCENT
 const colorScheme = process.env.NEXT_PUBLIC_COLOR_SCHEME
@@ -24,7 +24,7 @@ export async function getServerSideProps(ctx) {
             return {
                 props: {
                     err:
-                        "There is no accent color set. Please check your next.config.js or environment variables to confirm that the `NEXT_PUBLIC_ACCENT` variable is set."
+                        'There is no accent color set. Please check your next.config.js or environment variables to confirm that the `NEXT_PUBLIC_ACCENT` variable is set.'
                 }
             }
         }
@@ -33,7 +33,7 @@ export async function getServerSideProps(ctx) {
             return {
                 props: {
                     err:
-                        "There is no colorScheme set. Please check your next.config.js or environment variables to confirm that the `NEXT_PUBLIC_COLOR_SCHEME` variable is set."
+                        'There is no colorScheme set. Please check your next.config.js or environment variables to confirm that the `NEXT_PUBLIC_COLOR_SCHEME` variable is set.'
                 }
             }
         }
@@ -44,7 +44,7 @@ export async function getServerSideProps(ctx) {
             return {
                 props: {
                     err:
-                        "There is no team repository set. Please check your next.config.js or environment variables to confirm that the `teamRepo` variable is set."
+                        'There is no team repository set. Please check your next.config.js or environment variables to confirm that the `teamRepo` variable is set.'
                 }
             }
         }
@@ -53,18 +53,18 @@ export async function getServerSideProps(ctx) {
             return {
                 props: {
                     err:
-                        "There is no GitHub access token set. Please check your .env.local or environment variables to confirm that the `GITHUB_PAT` variable is set."
+                        'There is no GitHub access token set. Please check your .env.local or environment variables to confirm that the `GITHUB_PAT` variable is set.'
                 }
             }
         }
 
         const octokit = new Octokit({ auth: process.env.GITHUB_PAT })
-        const teamRepo = tr.split("/")
+        const teamRepo = tr.split('/')
         if (teamRepo.length !== 2) {
             return {
                 props: {
                     error:
-                        "The repo was specified in an incorrect format. Please check your environment variables or next.config.js env to confirm that the `teamRepo` var is set in the format of `organization/repo`."
+                        'The repo was specified in an incorrect format. Please check your environment variables or next.config.js env to confirm that the `teamRepo` var is set in the format of `organization/repo`.'
                 }
             }
         }
@@ -77,7 +77,7 @@ export async function getServerSideProps(ctx) {
             return {
                 props: {
                     err:
-                        "There is no teamBuildWorkflow set. Please check your next.config.js or environment variables to confirm that the `teamBuildWorkflow` variable is set to the path to your build workflow."
+                        'There is no teamBuildWorkflow set. Please check your next.config.js or environment variables to confirm that the `teamBuildWorkflow` variable is set to the path to your build workflow.'
                 }
             }
         }
@@ -92,7 +92,7 @@ export async function getServerSideProps(ctx) {
                 owner,
                 repo,
                 branch,
-                status: "success"
+                status: 'success'
             })
         } catch (err) {
             return {
@@ -122,13 +122,14 @@ export async function getServerSideProps(ctx) {
             jsonObj = parser.parse(manifest, {
                 parseAttributeValue: true,
                 ignoreAttributes: false,
-                attrNodeName: "attr"
+                attrNodeName: 'attr'
             })
-            sdkVer = jsonObj.manifest.attr["@_android:versionName"].toString() || "?"
+            sdkVer = jsonObj.manifest.attr['@_android:versionName'].toString() || '?'
         } catch (err) {
             return {
                 props: {
-                    err: "There was an error parsing the SDK Version from XML. Please ensure that this repo contains a robot controller project.",
+                    err:
+                        'There was an error parsing the SDK Version from XML. Please ensure that this repo contains a robot controller project.',
                     verboseErr: err.toString()
                 }
             }
@@ -170,25 +171,22 @@ export async function getServerSideProps(ctx) {
         console.dir(artifacts.data)
 
         const compareUrl = latestRun.head_repository.compare_url
-            .replace("{base}", previousRun.head_sha)
-            .replace("{head}", hash)
-            .replace("api.", "")
-            .replace("/repos", "")
+            .replace('{base}', previousRun.head_sha)
+            .replace('{head}', hash)
+            .replace('api.', '')
+            .replace('/repos', '')
 
         const dsDl = `/api/downloadDs/${sdkVer}`
         const rcDl = `/api/downloadRc/${artifact.id}`
 
-        var branchList
+        let branchList
         try {
             const branches = await octokit.repos.listBranches({
                 owner,
                 repo
             })
 
-            branchList = branches.data.map((branch) => {
-                return branch.name
-            })
-
+            branchList = branches.data.map((branch) => branch.name)
         } catch (err) {
             return {
                 props: {
@@ -222,7 +220,7 @@ export async function getServerSideProps(ctx) {
     } catch (err) {
         return {
             props: {
-                err: "There was an unhandled server error.",
+                err: 'There was an unhandled server error.',
                 verboseErr: err
             }
         }
@@ -277,8 +275,8 @@ export default function Home(props) {
                 <AlertIcon />
                 <AlertTitle mr={2}>There was an error.</AlertTitle>
                 <AlertDescription>
-                    {err ? `From the server: ${err}` : ""}
-                    {verboseErr ? <Code colorScheme="yellow">{verboseErr}</Code> : ""}
+                    {err ? `From the server: ${err}` : ''}
+                    {verboseErr ? <Code colorScheme="yellow">{verboseErr}</Code> : ''}
                 </AlertDescription>
                 <Link href="/">
                     <Button m="1" variant="solid">
