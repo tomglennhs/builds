@@ -12,7 +12,6 @@ export default async function rcDl(req, res) {
         archive_format: 'zip'
     })
 
-    console.log(dl)
     res.statusCode = 200
 
     res.end(Buffer.from(dl.data))

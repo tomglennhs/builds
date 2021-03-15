@@ -81,7 +81,6 @@ export async function getServerSideProps(ctx) {
                 }
             }
         }
-        console.log(ctx.params)
         const branch =
             Array.isArray(ctx.params.branch) && ctx.params.branch.length > 0
                 ? ctx.params.branch[0]
