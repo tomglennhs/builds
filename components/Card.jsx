@@ -1,9 +1,10 @@
-import { Flex, Badge, Button, Text } from '@chakra-ui/react'
-
-import { DownloadIcon } from '@chakra-ui/icons'
-import { DiGitCompare, DiCodeBadge } from 'react-icons/di'
-import { FullBuildInfo } from './FullBuildInfo'
+import { Flex, Badge, Button, Text, Select } from "@chakra-ui/react"
+import { useRouter } from "next/router"
+import { DownloadIcon } from "@chakra-ui/icons"
+import { DiGitCompare, DiCodeBadge } from "react-icons/di"
+import { FullBuildInfo } from "./FullBuildInfo"
 export function Card(props) {
+    const router = useRouter()
     const {
         sdkVer,
         buildDate,
@@ -11,11 +12,13 @@ export function Card(props) {
         commitMsg,
         teamRepo,
         githubUrl,
+        branchList,
         colorScheme,
         compareUrl,
         branch,
         dsDl,
-        rcDl
+        rcDl,
+        defaultBranch
     } = props
     return (
         <Flex
@@ -47,7 +50,7 @@ export function Card(props) {
                     href={rcDl}
                     download={`GBRobotControllerApp_SDK${sdkVer}_${buildDate.replace(
                         /\W+/g,
-                        '-'
+                        "-"
                     )}_${commitHash}.zip`}>
                     <Button
                         m="1"
@@ -91,6 +94,23 @@ export function Card(props) {
                     </Button>
                 </a>
             </Flex>
+            <Select
+                p={1}
+                onChange={(evt) => {
+                    let val = evt.target.value
+                    if (val && (val != branch)) {
+                        router.push(val)
+                    }
+                }}
+                placeholder="Select branch...">
+                {branchList.map((branch) => {
+                    return (
+                        <option key={branch} value={branch}>
+                            {branch} {branch === defaultBranch ? "(default)" : ""}
+                        </option>
+                    )
+                })}
+            </Select>
             <Text pt={2} color="gray.500" fontSize="xs">
                 Currently WIP but mostly functional.
             </Text>
