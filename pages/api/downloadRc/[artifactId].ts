@@ -14,5 +14,5 @@ export default async function rcDl(req, res) {
 
     res.statusCode = 200
 
-    res.end(Buffer.from(dl.data))
+    res.end(Buffer.from(dl.data as any))
 }
