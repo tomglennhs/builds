@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "start": "next start",
+        "start": "node server.js",
         "format": "prettier --single-quote --write './**/*.{js,ts,tsx,jsx,json}'",
         "format:check": "prettier --single-quote --check './**/*.{js,ts,tsx,jsx,json}'",
         "lint": "eslint \"./**/*.{js,ts,tsx,jsx}\" --quiet --fix",
