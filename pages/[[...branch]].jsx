@@ -14,14 +14,38 @@ import {
 import { GoMarkGithub } from 'react-icons/go'
 import { Card } from '../components/Card'
 const parser = require('fast-xml-parser')
-
+const revalidate = process.env.REVAL_SECS || 10
 const accent = process.env.NEXT_PUBLIC_ACCENT
 const colorScheme = process.env.NEXT_PUBLIC_COLOR_SCHEME
+const octokit = new Octokit({ auth: process.env.GITHUB_PAT })
+const tr = process.env.teamRepo
+const teamRepo = tr.split('/')
+export async function getStaticPaths() {
+    // const res = await fetch('https://.../posts')
+    // const posts = await res.json()
 
-export async function getServerSideProps(ctx) {
+    const branches = await octokit.repos.listBranches({
+        owner:teamRepo[0],
+        repo:teamRepo[1],
+      });
+      
+
+    // Get the paths we want to pre-render based on posts
+    const paths = branches.data.map((b) => ({
+      params: { branch: [b.name] },
+    }))
+  
+    // We'll pre-render only these paths at build time.
+    // { fallback: blocking } will server-render pages
+    // on-demand if the path doesn't exist.
+    return { paths, fallback: 'blocking' }
+  }
+
+export async function getStaticProps(ctx) {
     try {
         if (!accent) {
             return {
+                revalidate,
                 props: {
                     err:
                         'There is no accent color set. Please check your next.config.js or environment variables to confirm that the `NEXT_PUBLIC_ACCENT` variable is set.'
@@ -31,6 +55,7 @@ export async function getServerSideProps(ctx) {
 
         if (!colorScheme) {
             return {
+                revalidate,
                 props: {
                     err:
                         'There is no colorScheme set. Please check your next.config.js or environment variables to confirm that the `NEXT_PUBLIC_COLOR_SCHEME` variable is set.'
@@ -38,10 +63,11 @@ export async function getServerSideProps(ctx) {
             }
         }
 
-        const tr = process.env.teamRepo
+        
 
         if (!tr) {
             return {
+                revalidate,
                 props: {
                     err:
                         'There is no team repository set. Please check your next.config.js or environment variables to confirm that the `teamRepo` variable is set.'
@@ -51,6 +77,7 @@ export async function getServerSideProps(ctx) {
 
         if (!process.env.GITHUB_PAT) {
             return {
+                revalidate,
                 props: {
                     err:
                         'There is no GitHub access token set. Please check your .env.local or environment variables to confirm that the `GITHUB_PAT` variable is set.'
@@ -58,13 +85,13 @@ export async function getServerSideProps(ctx) {
             }
         }
 
-        const octokit = new Octokit({ auth: process.env.GITHUB_PAT })
-        const teamRepo = tr.split('/')
+        
         if (teamRepo.length !== 2) {
             return {
+                revalidate,
                 props: {
                     error:
-                        'The repo was specified in an incorrect format. Please check your environment variables or next.config.js env to confirm that the `teamRepo` var is set in the format of `organization/repo`.'
+                        'The repo was specified in an incorrect format. Please check your environment variables or next.config.js env to confirm that the `teamRepo` var is set in the format of `owner/repo`.'
                 }
             }
         }
@@ -75,6 +102,7 @@ export async function getServerSideProps(ctx) {
 
         if (!buildWorkflow) {
             return {
+                revalidate,
                 props: {
                     err:
                         'There is no teamBuildWorkflow set. Please check your next.config.js or environment variables to confirm that the `teamBuildWorkflow` variable is set to the path to your build workflow.'
@@ -96,6 +124,7 @@ export async function getServerSideProps(ctx) {
             })
         } catch (err) {
             return {
+                revalidate,
                 props: {
                     err: `There was an error fetching runs of workflow ${buildWorkflow} for repo ${tr}.`,
                     verboseErr: err.toString()
@@ -108,7 +137,9 @@ export async function getServerSideProps(ctx) {
         try {
             manifest = await (await fetch(manifestUrl)).text()
         } catch (err) {
+            
             return {
+                revalidate,
                 props: {
                     err: `There was an error fetching the SDK version. Please confirm that ${manifestUrl} exists and returns an XML string.`,
                     verboseErr: err.toString()
@@ -127,6 +158,7 @@ export async function getServerSideProps(ctx) {
             sdkVer = jsonObj.manifest.attr['@_android:versionName'].toString() || '?'
         } catch (err) {
             return {
+                revalidate,
                 props: {
                     err:
                         'There was an error parsing the SDK Version from XML. Please ensure that this repo contains a robot controller project.',
@@ -189,6 +221,7 @@ export async function getServerSideProps(ctx) {
             branchList = branches.data.map((branch) => branch.name)
         } catch (err) {
             return {
+                revalidate,
                 props: {
                     err: `There was an error retrieving branches for repo ${tr}.`,
                     verboseErr: err.toString()
@@ -198,6 +231,7 @@ export async function getServerSideProps(ctx) {
 
         return {
             props: {
+                revalidate,
                 data: {
                     sdkVer,
                     commitHash: hash.substring(0, 6),
@@ -219,6 +253,7 @@ export async function getServerSideProps(ctx) {
         }
     } catch (err) {
         return {
+            revalidate,
             props: {
                 err: 'There was an unhandled server error.',
                 verboseErr: err
@@ -252,7 +287,9 @@ export default function Home(props) {
                     direction="column"
                     justify="center"
                     align="center"
-                    bg={accent}>
+                    bg={accent}
+                    >
+
                     <Card colorScheme={colorScheme} {...props.data} />
 
                     <a

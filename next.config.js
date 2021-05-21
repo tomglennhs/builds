@@ -7,7 +7,8 @@ module.exports = {
         upstreamRepo: 'FIRST-Tech-Challenge/FtcRobotController',
         NEXT_PUBLIC_ACCENT: '#ef4b24',
         // color scheme must be one of "orange" | "whiteAlpha" | "blackAlpha" | "gray" | "red" | "yellow" | "green" | "teal" | "blue" | "cyan" | "purple" | "pink" | "linkedin" | "facebook" | "messenger" | "whatsapp" | "twitter" | "telegram"
-        NEXT_PUBLIC_COLOR_SCHEME: 'orange'
+        NEXT_PUBLIC_COLOR_SCHEME: 'orange',
+        REVAL_SECS: 10,
     },
     async headers() {
         return [

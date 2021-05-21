@@ -30,6 +30,7 @@ export function Card(props) {
             p="3"
             bg="white"
             borderRadius="2xl"
+            mx="4"
             mb="6"
             direction="column">
             <Text color="gray.500" fontWeight="bold" fontSize="2xl">
