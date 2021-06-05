@@ -25,21 +25,20 @@ export async function getStaticPaths() {
     // const posts = await res.json()
 
     const branches = await octokit.repos.listBranches({
-        owner:teamRepo[0],
-        repo:teamRepo[1],
-      });
-      
+        owner: teamRepo[0],
+        repo: teamRepo[1]
+    })
 
     // Get the paths we want to pre-render based on posts
     const paths = branches.data.map((b) => ({
-      params: { branch: [b.name] },
+        params: { branch: [b.name] }
     }))
-  
+
     // We'll pre-render only these paths at build time.
     // { fallback: blocking } will server-render pages
     // on-demand if the path doesn't exist.
     return { paths, fallback: 'blocking' }
-  }
+}
 
 export async function getStaticProps(ctx) {
     try {
@@ -63,8 +62,6 @@ export async function getStaticProps(ctx) {
             }
         }
 
-        
-
         if (!tr) {
             return {
                 revalidate,
@@ -85,7 +82,6 @@ export async function getStaticProps(ctx) {
             }
         }
 
-        
         if (teamRepo.length !== 2) {
             return {
                 revalidate,
@@ -137,7 +133,6 @@ export async function getStaticProps(ctx) {
         try {
             manifest = await (await fetch(manifestUrl)).text()
         } catch (err) {
-            
             return {
                 revalidate,
                 props: {
@@ -287,9 +282,7 @@ export default function Home(props) {
                     direction="column"
                     justify="center"
                     align="center"
-                    bg={accent}
-                    >
-
+                    bg={accent}>
                     <Card colorScheme={colorScheme} {...props.data} />
 
                     <a

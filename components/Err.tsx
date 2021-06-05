@@ -1,4 +1,3 @@
-
 import Link from 'next/link'
 import {
     Alert,
@@ -9,7 +8,7 @@ import {
     Button
 } from '@chakra-ui/react'
 
-export function Err(props: { err: string | any, verboseErr?: string | any }) {
+export function Err(props: { err: string | any; verboseErr?: string | any }) {
     const { err, verboseErr } = props
     return (
         <Alert status="error">
@@ -22,7 +21,7 @@ export function Err(props: { err: string | any, verboseErr?: string | any }) {
             <Link href="/">
                 <Button m="1" variant="solid">
                     Go Home
-                    </Button>
+                </Button>
             </Link>
         </Alert>
     )

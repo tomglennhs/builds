@@ -13,15 +13,15 @@ module.exports = {
     },
     async headers() {
         return [
-          {
-            source: '/api/downloadDs',
-            headers: [
-              {
-                key: 'Content-Type',
-                value: 'application/vnd.android.package-archive'
-              }
-            ]
-          }
+            {
+                source: '/api/downloadDs',
+                headers: [
+                    {
+                        key: 'Content-Type',
+                        value: 'application/vnd.android.package-archive'
+                    }
+                ]
+            }
         ]
     }
 }

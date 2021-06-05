@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-const readline = require('readline');
+const readline = require('readline')
 
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
-});
+})
 
 async function getStdinLine(): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -12,7 +12,7 @@ async function getStdinLine(): Promise<any> {
             rl.on('line', (input) => {
                 rl.close()
                 resolve(input)
-            });
+            })
         } catch (e) {
             reject(e)
             rl.close()
@@ -23,16 +23,27 @@ async function getStdinLine(): Promise<any> {
 async function timeout(ms: number | string) {
     return new Promise((resolve, reject) => {
         try {
-            setTimeout(() => { reject(), ms })
+            setTimeout(() => {
+                reject()
+            }, ms)
         } catch (e) {
             reject(e)
         }
     })
 }
 
-export default async function replDeployRefresh(req: NextApiRequest, res: NextApiResponse) {
+export default async function replDeployRefresh(
+    req: NextApiRequest,
+    res: NextApiResponse
+) {
     try {
-        console.log("repl.deploy" + req.body + req.headers["Signature"])
+        if (req.method !== 'POST') {
+            res.statusCode = 400
+            return res.send(
+                'Only POST requests from repl.deploy are allowed to this endpoint. See https://github.com/KhushrajRathod/repl.deploy for more info'
+            )
+        }
+        console.log(`repl.deploy${req.body}${req.headers.Signature}`)
         const line: any = await Promise.race([getStdinLine, timeout(10000)])
         const result: {
             body: string
@@ -41,9 +52,10 @@ export default async function replDeployRefresh(req: NextApiRequest, res: NextAp
 
         res.statusCode = result.status
         res.end(result.body)
-        console.log("repl.deploy-success")
+        console.log('repl.deploy-success')
     } catch (e) {
         res.statusCode = 500
-        res.send("Server Error: " + e)
+        res.send(`Server Error: ${e}`)
+        
     }
 }
