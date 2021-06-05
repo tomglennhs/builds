@@ -1,8 +1,9 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 import { Octokit } from '@octokit/rest'
 const octokit = new Octokit({ auth: process.env.GITHUB_PAT })
 
-export default async function rcDl(req, res) {
-    const { artifactId } = req.query
+export default async function rcDl(req: NextApiRequest, res: NextApiResponse) {
+    const { artifactId: string } = req.query
     const artifact_id = parseInt(artifactId)
     const tr = process.env.teamRepo.split('/')
     const dl = await octokit.actions.downloadArtifact({
