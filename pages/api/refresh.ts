@@ -20,7 +20,7 @@ async function getStdinLine(): Promise<any> {
     })
 }
 
-async function timeout(ms: number | string) {
+async function timeout(ms: number) {
     return new Promise((resolve, reject) => {
         try {
             setTimeout(() => {
