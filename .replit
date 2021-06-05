@@ -1,3 +1,3 @@
 language = "typescript"
-run="yarn run build && ./repl.deploy yarn run start"
+run="./repl.deploy yarn run serve"
 # run="./repl.deploy yarn run dev"
