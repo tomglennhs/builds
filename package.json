@@ -12,7 +12,7 @@
         "lint:check": "eslint \"./**/*.{js,ts,tsx,jsx}\" --quiet",
         "check": "yarn run format:check && yarn run lint:check",
         "check:fix": "yarn run format && yarn run lint", 
-        "serve": "yarn run build && yarn run start",
+        "serve": "yarn run build && yarn run start"
     },
     "dependencies": {
         "@chakra-ui/icons": "^1.0.5",
