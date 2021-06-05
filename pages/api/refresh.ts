@@ -18,18 +18,32 @@ async function getStdinLine(): Promise<any> {
             rl.close()
         }
     })
+}
 
+async function timeout(ms: number | string) {
+    return new Promise((resolve, reject) => {
+        try {
+            setTimeout(() => { reject(), ms })
+        } catch (e) {
+            reject(e)
+        }
+    })
 }
 
 export default async function replDeployRefresh(req: NextApiRequest, res: NextApiResponse) {
-     console.log("repl.deploy" + req.body + req.headers.get("Signature"))
+    try {
+        console.log("repl.deploy" + req.body + req.headers["Signature"])
+        const line: any = await Promise.race([getStdinLine, timeout(10000)])
+        const result: {
+            body: string
+            status: number
+        } = JSON.parse(line)
 
-    const result: {
-        body: string
-        status: number
-    } = JSON.parse((await getStdinLine())!)
-
-    res.statusCode = result.status
-    res.end(result.body)
-    console.log("repl.deploy-success")
+        res.statusCode = result.status
+        res.end(result.body)
+        console.log("repl.deploy-success")
+    } catch (e) {
+        res.statusCode = 500
+        res.send("Server Error: " + e)
+    }
 }
